@@ -21,7 +21,7 @@ public class MessageId implements Serializable {
     private Long messageNumber;
 
     public MessageId(Conversation conversation, long previousMessage){
-        conversationName = conversation.getName();
+        conversationName = conversation.getConversationName();
         messageNumber = previousMessage;
     }
 }

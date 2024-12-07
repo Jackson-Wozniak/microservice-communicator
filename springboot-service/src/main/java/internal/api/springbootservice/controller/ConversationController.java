@@ -1,6 +1,7 @@
 package internal.api.springbootservice.controller;
 
 import internal.api.springbootservice.entity.Message;
+import internal.api.springbootservice.exception.ConversationException;
 import internal.api.springbootservice.payload.ConverstationRequest;
 import internal.api.springbootservice.payload.MessageRequest;
 import internal.api.springbootservice.service.ConversationService;
@@ -24,7 +25,11 @@ public class ConversationController {
 
     @PostMapping
     public ResponseEntity<String> receiveMessage(@RequestBody MessageRequest request){
-        conversationService.receiveMessage(request);
+        try{
+            conversationService.receiveMessage(request);
+        }catch (ConversationException ex){
+            return new ResponseEntity<>(ex.getMessage(), ex.getStatus());
+        }
         return ResponseEntity.ok("Message received, sending next shortly");
     }
 }

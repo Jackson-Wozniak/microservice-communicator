@@ -18,7 +18,7 @@ public class Conversation {
 
     @Id
     @Column(name = "conversation_name")
-    private String name;
+    private String conversationName;
 
     @Column(name = "began_at")
     private LocalDateTime beganAt;
@@ -27,7 +27,7 @@ public class Conversation {
     private List<Message> messages = new ArrayList<>();
 
     public Conversation(String name, LocalDateTime beganAt){
-        this.name = name;
+        this.conversationName = name;
         this.beganAt = beganAt;
     }
 

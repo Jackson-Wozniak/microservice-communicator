@@ -3,6 +3,7 @@ package internal.api.springbootservice.service;
 import internal.api.springbootservice.entity.Conversation;
 import internal.api.springbootservice.entity.Message;
 import internal.api.springbootservice.exception.ConversationException;
+import internal.api.springbootservice.exception.MessageException;
 import internal.api.springbootservice.payload.MessageRequest;
 import internal.api.springbootservice.repository.ConversationRepository;
 import lombok.AllArgsConstructor;
@@ -30,7 +31,8 @@ public class ConversationService {
         LocalDateTime receivedAt = LocalDateTime.now();
         Conversation conversation = conversationRepository.findById(req.getConversation()).orElseThrow(
                 () -> ConversationException.notFound("Cannot find conversation: " + req.getConversation()));
-        Message message = new Message(conversation, req.getMessageId(), req.getTimestamp(), receivedAt);
+
+        Message message = new Message(conversation, req.getMessageId(), req.getTimestamp(), receivedAt.toString());
         conversation.addMessage(message);
         conversationRepository.save(conversation);
 

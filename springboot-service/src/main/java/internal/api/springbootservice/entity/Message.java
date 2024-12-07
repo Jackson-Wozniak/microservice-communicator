@@ -19,18 +19,18 @@ public class Message {
     private MessageId messageId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId(value = "name")
+    @MapsId(value = "conversationName")
     @JoinColumn(name = "conversation_name")
     private Conversation conversation;
 
     @Column(name = "timestamp_received")
-    private LocalDateTime timestampReceived;
+    private String timestampReceived;
 
     @Column(name = "timestamp_sent")
-    private LocalDateTime timestampSent;
+    private String timestampSent;
 
     public Message(Conversation conversation, long lastMessage,
-                   LocalDateTime sentAt, LocalDateTime receivedAt) {
+                   String sentAt, String receivedAt) {
         this.messageId = new MessageId(conversation, lastMessage);
         this.conversation = conversation;
         this.timestampSent = sentAt;
