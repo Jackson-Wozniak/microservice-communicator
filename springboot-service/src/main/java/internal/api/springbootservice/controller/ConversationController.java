@@ -1,7 +1,9 @@
 package internal.api.springbootservice.controller;
 
+import internal.api.springbootservice.entity.Conversation;
 import internal.api.springbootservice.entity.Message;
 import internal.api.springbootservice.exception.ConversationException;
+import internal.api.springbootservice.payload.ConversationDto;
 import internal.api.springbootservice.payload.ConverstationRequest;
 import internal.api.springbootservice.payload.MessageRequest;
 import internal.api.springbootservice.service.ConversationService;
@@ -16,6 +18,12 @@ import org.springframework.web.bind.annotation.*;
 public class ConversationController {
 
     private final ConversationService conversationService;
+
+    @GetMapping(value = "/{name}")
+    public ResponseEntity<ConversationDto> getConversation(@PathVariable("name") String name){
+        Conversation conversation = conversationService.findConversationByName(name);
+        return ResponseEntity.ok(new ConversationDto(conversation));
+    }
 
     @PostMapping(value = "/start")
     public ResponseEntity<String> startConversation(@RequestBody ConverstationRequest request){

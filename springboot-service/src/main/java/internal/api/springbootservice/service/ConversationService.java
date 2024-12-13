@@ -1,5 +1,6 @@
 package internal.api.springbootservice.service;
 
+import internal.api.springbootservice.client.DotnetHttpClient;
 import internal.api.springbootservice.entity.Conversation;
 import internal.api.springbootservice.entity.Message;
 import internal.api.springbootservice.exception.ConversationException;
@@ -10,12 +11,21 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @AllArgsConstructor
 public class ConversationService {
 
     private final ConversationRepository conversationRepository;
+    private final DotnetHttpClient dotnetHttpClient;
+
+    public Conversation findConversationByName(String name){
+        return conversationRepository.findById(name)
+                .orElseThrow(() -> ConversationException.notFound("cannot find: " + name));
+    }
 
     public void startConversation(String name){
         if(!Conversation.isValidName(name)){
@@ -37,5 +47,7 @@ public class ConversationService {
         conversationRepository.save(conversation);
 
         //Now schedule new message to be sent to Http Client
+        CompletableFuture.delayedExecutor(10, TimeUnit.SECONDS)
+                .execute(() -> dotnetHttpClient.sendNextMessage(message));
     }
 }
