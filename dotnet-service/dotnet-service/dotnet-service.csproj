@@ -23,7 +23,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="src\Dtos\" />
       <Folder Include="src\Exceptions\" />
     </ItemGroup>
 
