@@ -1,3 +1,4 @@
+using dotnet_service.Clients;
 using dotnet_service.Configurations;
 using dotnet_service.Data;
 using dotnet_service.Services;
@@ -10,6 +11,8 @@ builder.Services.AddDbContext<ConversationDbContext>(options =>
 {
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
+
+builder.Services.AddSingleton<SpringBootHttpClient>();
 
 builder.Services.AddControllers();
 

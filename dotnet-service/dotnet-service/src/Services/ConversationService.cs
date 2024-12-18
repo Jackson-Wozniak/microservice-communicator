@@ -1,4 +1,5 @@
-﻿using dotnet_service.Data;
+﻿using dotnet_service.Clients;
+using dotnet_service.Data;
 using dotnet_service.Dtos;
 using dotnet_service.Entities;
 
@@ -7,10 +8,12 @@ namespace dotnet_service.Services;
 public class ConversationService : IConversationService
 {
     private readonly ConversationDbContext _conversationDbContext;
+    private readonly SpringBootHttpClient _springBootHttpClient;
 
-    public ConversationService(ConversationDbContext dbContext)
+    public ConversationService(ConversationDbContext dbContext, SpringBootHttpClient httpClient)
     {
         _conversationDbContext = dbContext;
+        _springBootHttpClient = httpClient;
     }
     
     public async Task<Conversation> FindConversationByName(string name)
@@ -82,5 +85,10 @@ public class ConversationService : IConversationService
         _conversationDbContext.SaveChanges();
         
         //now wait 10 seconds and then send a new message back to sender
+        Task.Run(() =>
+        {
+            Thread.Sleep(10000);
+            _springBootHttpClient.SendNextMessage(message);
+        });
     }
 }
