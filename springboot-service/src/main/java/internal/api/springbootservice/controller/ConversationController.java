@@ -4,7 +4,7 @@ import internal.api.springbootservice.entity.Conversation;
 import internal.api.springbootservice.entity.Message;
 import internal.api.springbootservice.exception.ConversationException;
 import internal.api.springbootservice.payload.ConversationDto;
-import internal.api.springbootservice.payload.ConverstationRequest;
+import internal.api.springbootservice.payload.ConversationRequest;
 import internal.api.springbootservice.payload.MessageRequest;
 import internal.api.springbootservice.service.ConversationService;
 import lombok.AllArgsConstructor;
@@ -26,7 +26,7 @@ public class ConversationController {
     }
 
     @PostMapping(value = "/start")
-    public ResponseEntity<String> startConversation(@RequestBody ConverstationRequest request){
+    public ResponseEntity<String> startConversation(@RequestBody ConversationRequest request){
         conversationService.startConversation(request.getName());
         return new ResponseEntity<>("Conversation: " + request.getName() + " started", HttpStatus.CREATED);
     }

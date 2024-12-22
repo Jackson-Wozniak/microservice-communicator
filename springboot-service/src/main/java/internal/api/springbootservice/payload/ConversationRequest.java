@@ -5,11 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ConverstationRequest {
+public class ConversationRequest {
 
     private String name;
 
-    public String getName(){
-        return this.name;
-    }
 }
