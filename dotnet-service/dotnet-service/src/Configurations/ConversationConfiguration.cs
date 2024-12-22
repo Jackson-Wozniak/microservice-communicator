@@ -1,4 +1,5 @@
-﻿using dotnet_service.Services;
+﻿using dotnet_service.Clients;
+using dotnet_service.Services;
 
 namespace dotnet_service.Configurations;
 
@@ -27,8 +28,10 @@ public class ConversationConfiguration : IHostedService
     {
         using var scope = _serviceProvider.CreateScope();
         var conversationService = scope.ServiceProvider.GetRequiredService<IConversationService>();
+        var springBootHttpClient = scope.ServiceProvider.GetRequiredService<SpringBootHttpClient>();
             
         conversationService.ClearAndBeginConversation(ConversationName);
         //now send first message to client
+        springBootHttpClient.SendFirstMessage().Wait();
     }
 }

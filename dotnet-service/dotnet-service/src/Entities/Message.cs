@@ -5,10 +5,8 @@ namespace dotnet_service.Entities;
 
 public class Message
 {
-    [Key, Column(Order = 0)]
     public string ConversationName { get; set; }
     
-    [Key, Column(Order = 1)]
     public long MessageId { get; set; }
     
     public Conversation Conversation { get; set; }
@@ -17,6 +15,11 @@ public class Message
     
     public string TimestampReceived { get; set; }
 
+    public Message()
+    {
+        
+    }
+    
     public Message(long messageId, Conversation conversation, string sentAt, string receivedAt)
     {
         MessageId = messageId;

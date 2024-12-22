@@ -15,6 +15,17 @@ public class SpringBootMessageRequest
         
     }
 
+    public static SpringBootMessageRequest firstMessage(string conversation)
+    {
+        var newMessage = new SpringBootMessageRequest
+        {
+            MessageId = 1,
+            ConversationName = conversation,
+            TimestampSent = DateTime.Now.ToString("hh:mm:ss")
+        };
+        return newMessage;
+    }
+    
     public static SpringBootMessageRequest nextMessage(Message message)
     {
         var newMessage = new SpringBootMessageRequest();

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("AirportDbConnection");
+var connectionString = builder.Configuration.GetConnectionString("ConversationDbConnection");
 builder.Services.AddDbContext<ConversationDbContext>(options =>
 {
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
