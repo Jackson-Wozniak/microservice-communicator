@@ -24,7 +24,7 @@ public class ConversationController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult<string> ReceiveMessage(MessageDto request)
+    public ActionResult<string> ReceiveMessage([FromBody] MessageDto request)
     {
         _conversationService.ReceiveMessage(request);
 

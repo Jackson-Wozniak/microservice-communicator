@@ -30,6 +30,11 @@ public class SpringBootHttpClient
             var response = await client.PostAsync(SpringBootStartConversation, content);
             response.EnsureSuccessStatusCode();
 
+            var messageContent = JsonSerializer.Serialize(firstMessage);
+            content = new StringContent(messageContent, Encoding.UTF8, "application/json");
+
+            response = await client.PostAsync(SpringBootSendMessage, content);
+            response.EnsureSuccessStatusCode();
             Console.WriteLine("Resource created successfully.");
         }
         catch (HttpRequestException e)

@@ -70,18 +70,18 @@ public class ConversationService : IConversationService
         var conversation = _conversationDbContext.Conversations.Find(request.ConversationName);
         if (conversation == null)
         {
-            return;
-            //throw exception
+            conversation = new Conversation(request.ConversationName, DateTime.Now);
+            _conversationDbContext.Conversations.Add(conversation);
+            _conversationDbContext.SaveChanges();
+            //TODO: throw exception
         }
 
         var message = new Message(request.MessageId, conversation, 
             request.SentAt, DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss"));
         
         conversation.Messages.Add(message);
-
+        _conversationDbContext.Conversations.Update(conversation);
         _conversationDbContext.Messages.Add(message);
-        _conversationDbContext.Conversations.Add(conversation);
-
         _conversationDbContext.SaveChanges();
         
         //now wait 10 seconds and then send a new message back to sender
