@@ -11,8 +11,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -39,12 +39,15 @@ public class ConversationService {
 
     public void receiveMessage(MessageRequest req){
         LocalDateTime receivedAt = LocalDateTime.now();
-        Conversation conversation = conversationRepository.findById(req.getConversation()).orElseThrow(
-                () -> ConversationException.notFound("Cannot find conversation: " + req.getConversation()));
+        Optional<Conversation> conversation = conversationRepository.findById(req.getConversation());
+        if(conversation.isEmpty()){
+            conversation = Optional.of(new Conversation(req.getConversation(), LocalDateTime.now()));
+            conversationRepository.save(conversation.get());
+        }
 
-        Message message = new Message(conversation, req.getMessageId(), req.getTimestamp(), receivedAt.toString());
-        conversation.addMessage(message);
-        conversationRepository.save(conversation);
+        Message message = new Message(conversation.get(), req.getMessageId(), req.getTimestamp(), receivedAt.toString());
+        conversation.get().addMessage(message);
+        conversationRepository.save(conversation.get());
 
         //Now schedule new message to be sent to Http Client
         CompletableFuture.delayedExecutor(10, TimeUnit.SECONDS)

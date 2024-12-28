@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 
 @Component
 @AllArgsConstructor
@@ -15,11 +16,12 @@ public class DotnetHttpClient {
 
     private final RestTemplate restTemplate;
 
-    public void sendNextMessage(Message oldMessage){
+    public void sendNextMessage(Message oldMessage) {
         DotnetMessageRequest message = new DotnetMessageRequest(oldMessage);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
         // Wrap the object and headers into an HttpEntity
         HttpEntity<DotnetMessageRequest> request = new HttpEntity<>(message, headers);
