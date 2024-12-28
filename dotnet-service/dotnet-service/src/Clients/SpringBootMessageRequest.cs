@@ -1,13 +1,17 @@
-﻿using dotnet_service.Entities;
+﻿using System.Text.Json.Serialization;
+using dotnet_service.Entities;
 
 namespace dotnet_service.Clients;
 
 public class SpringBootMessageRequest
 {
+    [JsonPropertyName("messageId")]
     public long MessageId { get; set; }
     
+    [JsonPropertyName("conversation")]
     public string ConversationName { get; set; }
     
+    [JsonPropertyName("timestamp")]
     public string TimestampSent { get; set; }
 
     private SpringBootMessageRequest()
