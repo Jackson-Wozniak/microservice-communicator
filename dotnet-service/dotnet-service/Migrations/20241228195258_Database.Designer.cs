@@ -12,8 +12,8 @@ using dotnet_service.Data;
 namespace dotnet_service.Migrations
 {
     [DbContext(typeof(ConversationDbContext))]
-    [Migration("20241222172727_DatabaseUpdate")]
-    partial class DatabaseUpdate
+    [Migration("20241228195258_Database")]
+    partial class Database
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,9 +45,6 @@ namespace dotnet_service.Migrations
 
                     b.Property<long>("MessageId")
                         .HasColumnType("bigint");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
 
                     b.Property<string>("TimestampReceived")
                         .IsRequired()

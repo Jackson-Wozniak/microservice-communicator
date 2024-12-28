@@ -43,9 +43,6 @@ namespace dotnet_service.Migrations
                     b.Property<long>("MessageId")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
                     b.Property<string>("TimestampReceived")
                         .IsRequired()
                         .HasColumnType("longtext");
