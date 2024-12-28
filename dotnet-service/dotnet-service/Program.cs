@@ -14,13 +14,13 @@ builder.Services.AddDbContext<ConversationDbContext>(options =>
 
 builder.Services.AddSingleton<SpringBootHttpClient>();
 
-builder.Services.AddControllers();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddHostedService<ConversationConfiguration>();
 builder.Services.AddScoped<IConversationService, ConversationService>();
+
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
@@ -31,7 +31,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseCors(x => x
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .SetIsOriginAllowed(_ => true)
+    .AllowCredentials());
+
+app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();
