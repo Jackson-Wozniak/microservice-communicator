@@ -5,7 +5,7 @@ namespace dotnet_service.Configurations;
 
 public class ConversationConfiguration : IHostedService
 {
-    private static readonly string ConversationName = "DOTNET CONVERSATION";
+    private static readonly string ConversationName = "Dotnet-Conversation";
     private readonly IServiceProvider _serviceProvider;
     
     public ConversationConfiguration(IServiceProvider serviceProvider)
