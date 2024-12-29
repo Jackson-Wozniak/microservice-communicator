@@ -3,11 +3,14 @@ package internal.api.springbootservice.configuration;
 import internal.api.springbootservice.client.DotnetHttpClient;
 import internal.api.springbootservice.entity.Conversation;
 import internal.api.springbootservice.entity.Message;
+import internal.api.springbootservice.properties.GlobalProperties;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 /*
 Begins the conversation. This MUST run to start the conversation and send the initial message.
@@ -27,7 +30,9 @@ public class ConversationConfiguration {
             - send request to clear dotnet conversation
             - begin new conversation
          */
-        dotnetHttpClient.sendNextMessage(new Message(new Conversation("Test", LocalDateTime.now()),
-                0, LocalDateTime.now().toString(), LocalDateTime.now().toString()));
+        CompletableFuture.delayedExecutor(10, TimeUnit.SECONDS)
+                .execute(() ->
+                        dotnetHttpClient.sendNextMessage(new Message(new Conversation(GlobalProperties.SPRING_BOOT_MESSAGE_NAME, LocalDateTime.now()),
+                0, LocalDateTime.now().toString(), LocalDateTime.now().toString())));
     }
 }

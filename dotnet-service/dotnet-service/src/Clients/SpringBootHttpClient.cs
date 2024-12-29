@@ -47,6 +47,20 @@ public class SpringBootHttpClient
     {
         var newMessage = SpringBootMessageRequest.nextMessage(message);
         
+        using var client = new HttpClient();
         //send to spring boot
+        try
+        {
+            var messageContent = JsonSerializer.Serialize(newMessage);
+            var content = new StringContent(messageContent, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync(SpringBootSendMessage, content);
+            response.EnsureSuccessStatusCode();
+            Console.WriteLine("Resource created successfully.");
+        }
+        catch (HttpRequestException e)
+        {
+            Console.WriteLine($"Request error: {e.Message}");
+        }
     }
 }

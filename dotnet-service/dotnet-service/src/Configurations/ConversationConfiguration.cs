@@ -26,6 +26,7 @@ public class ConversationConfiguration : IHostedService
     
     private void InitializeConversation()
     {
+        Thread.Sleep(10000); //pause so that spring boot boots up as well
         using var scope = _serviceProvider.CreateScope();
         var conversationService = scope.ServiceProvider.GetRequiredService<IConversationService>();
         var springBootHttpClient = scope.ServiceProvider.GetRequiredService<SpringBootHttpClient>();

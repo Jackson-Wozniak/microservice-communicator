@@ -15,6 +15,13 @@ public class ConversationController : ControllerBase
         _conversationService = conversationService;
     }
 
+    [HttpGet("/{name}")]
+    public ActionResult<List<MessageDto>> GetConversation(string name)
+    {
+        var convo = _conversationService.FindConversationByName(name);
+        return Ok(convo);
+    }
+    
     [HttpPost("/start")]
     public ActionResult<string> StartConversation([FromQuery] string name)
     {
