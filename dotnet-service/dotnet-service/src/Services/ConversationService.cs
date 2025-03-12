@@ -103,4 +103,24 @@ public class ConversationService : IConversationService
             _springBootHttpClient.SendNextMessage(message);
         });
     }
+
+    public void DeleteAll()
+    {
+        using var transaction = _conversationDbContext.Database.BeginTransaction();
+        try
+        {
+            _conversationDbContext.Messages.RemoveRange(_conversationDbContext.Messages);
+            _conversationDbContext.SaveChanges();
+            
+            _conversationDbContext.Conversations.RemoveRange(_conversationDbContext.Conversations);
+            _conversationDbContext.SaveChanges();
+
+            transaction.Commit();
+        }
+        catch (Exception)
+        {
+            transaction.Rollback();
+            //throw exception
+        }
+    }
 }

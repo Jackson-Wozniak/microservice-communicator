@@ -38,6 +38,13 @@ public class ConversationService {
 
     @Transactional
     @Modifying
+    public void deleteAll(){
+        messageRepository.deleteAll();
+        conversationRepository.deleteAll();
+    }
+
+    @Transactional
+    @Modifying
     public void startConversation(MessageRequest req){
         LocalDateTime receivedAt = LocalDateTime.now();
         if(!Conversation.isValidName(req.getConversation())){

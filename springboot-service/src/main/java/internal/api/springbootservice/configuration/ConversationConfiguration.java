@@ -22,9 +22,11 @@ Currently, there is no fallback on failure, but this could be added later on
 public class ConversationConfiguration {
 
     private final DotnetHttpClient dotnetHttpClient;
+    private final ConversationService conversationService;
 
     @PostConstruct
     public void beginConversation() {
+        conversationService.deleteAll();
         CompletableFuture.delayedExecutor(10, TimeUnit.SECONDS)
                 .execute(() -> dotnetHttpClient.startConversation(GlobalProperties.SPRING_BOOT_MESSAGE_NAME));
     }

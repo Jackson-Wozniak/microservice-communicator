@@ -10,4 +10,5 @@ public interface IConversationService
     void ClearAndBeginConversation(string name);
     void BeginConversation(string name);
     void ReceiveMessage(MessageDto request);
+    void DeleteAll();
 }
