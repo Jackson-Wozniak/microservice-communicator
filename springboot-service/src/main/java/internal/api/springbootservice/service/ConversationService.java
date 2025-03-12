@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -22,6 +23,10 @@ public class ConversationService {
     private final ConversationRepository conversationRepository;
     private final DotnetHttpClient dotnetHttpClient;
 
+    public List<Conversation> findAllConversations(){
+        return conversationRepository.findAll();
+    }
+
     public Conversation findConversationByName(String name){
         return conversationRepository.findById(name)
                 .orElseThrow(() -> ConversationException.notFound("cannot find: " + name));
@@ -31,9 +36,8 @@ public class ConversationService {
         if(!Conversation.isValidName(name)){
             throw ConversationException.createException("Conversation: " + name + " is not valid name");
         }
-        if(conversationRepository.findById(name).isPresent()){
-            throw ConversationException.createException("Conversation: " + name + " already exists");
-        }
+        Optional<Conversation> conversation = conversationRepository.findById(name);
+        conversation.ifPresent(conversationRepository::delete);
         conversationRepository.save(new Conversation(name, LocalDateTime.now()));
     }
 

@@ -15,6 +15,11 @@ public class ConversationService : IConversationService
         _conversationDbContext = dbContext;
         _springBootHttpClient = httpClient;
     }
+
+    public List<Conversation> FindAllConversations()
+    {
+        return _conversationDbContext.Conversations.ToList();
+    }
     
     public async Task<Conversation> FindConversationByName(string name)
     {
@@ -30,11 +35,14 @@ public class ConversationService : IConversationService
 
     public void BeginConversation(string name)
     {
-        if (_conversationDbContext.Conversations.Find(name) != null)
+        var conversation = _conversationDbContext.Conversations.Find(name);
+        if (conversation != null)
         {
+            _conversationDbContext.Conversations.Remove(conversation);
+            _conversationDbContext.SaveChanges();
             //throw exception
         }
-        var conversation = new Conversation(name, DateTime.Now);
+        conversation = new Conversation(name, DateTime.Now);
 
         _conversationDbContext.Conversations.Add(conversation);
         _conversationDbContext.SaveChanges();

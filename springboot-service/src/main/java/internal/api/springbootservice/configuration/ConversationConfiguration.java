@@ -31,8 +31,10 @@ public class ConversationConfiguration {
             - begin new conversation
          */
         CompletableFuture.delayedExecutor(10, TimeUnit.SECONDS)
-                .execute(() ->
-                        dotnetHttpClient.sendNextMessage(new Message(new Conversation(GlobalProperties.SPRING_BOOT_MESSAGE_NAME, LocalDateTime.now()),
-                0, LocalDateTime.now().toString(), LocalDateTime.now().toString())));
+                .execute(() -> {
+                    dotnetHttpClient.startConversation(GlobalProperties.SPRING_BOOT_MESSAGE_NAME);
+                    dotnetHttpClient.sendNextMessage(new Message(new Conversation(GlobalProperties.SPRING_BOOT_MESSAGE_NAME, LocalDateTime.now()),
+                            0, LocalDateTime.now().toString(), LocalDateTime.now().toString()));
+                });
     }
 }

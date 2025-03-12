@@ -7,6 +7,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.Collections;
 
@@ -40,7 +41,8 @@ public class DotnetHttpClient {
          */
     }
 
-    public HttpStatus restartConversation(String conversation, LocalDateTime timestamp){
-        return null;
+    public HttpStatusCode startConversation(String conversation){
+        String url = "http://localhost:17428/start?name=SpringBoot-Conversation";
+        return restTemplate.postForEntity(url, HttpEntity.EMPTY, String.class).getStatusCode();
     }
 }

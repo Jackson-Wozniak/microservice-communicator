@@ -15,6 +15,12 @@ public class ConversationController : ControllerBase
         _conversationService = conversationService;
     }
 
+    [HttpGet]
+    public ActionResult<List<MessageDto>> GetConversations()
+    {
+        return Ok(_conversationService.FindAllConversations());
+    }
+
     [HttpGet("/{name}")]
     public ActionResult<List<MessageDto>> GetConversation(string name)
     {
@@ -22,7 +28,8 @@ public class ConversationController : ControllerBase
         return Ok(convo);
     }
     
-    [HttpPost("/start")]
+    [HttpPost]
+    [Route("/start")]
     public ActionResult<string> StartConversation([FromQuery] string name)
     {
         _conversationService.BeginConversation(name);

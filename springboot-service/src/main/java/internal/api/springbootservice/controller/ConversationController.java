@@ -12,12 +12,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/api/v1/conversations")
 @AllArgsConstructor
 public class ConversationController {
 
     private final ConversationService conversationService;
+
+    @GetMapping
+    public ResponseEntity<List<ConversationDto>> getConversations(){
+        return ResponseEntity.ok(conversationService.findAllConversations().stream()
+                .map(ConversationDto::new).toList());
+    }
 
     @GetMapping(value = "/{name}")
     public ResponseEntity<ConversationDto> getConversation(@PathVariable("name") String name){
