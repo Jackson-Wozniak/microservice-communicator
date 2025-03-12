@@ -2,6 +2,7 @@
 using dotnet_service.Data;
 using dotnet_service.Dtos;
 using dotnet_service.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace dotnet_service.Services;
 
@@ -53,9 +54,12 @@ public class ConversationService : IConversationService
         using var transaction = _conversationDbContext.Database.BeginTransaction();
         try
         {
-            var conversation = _conversationDbContext.Conversations.Find(name);
+            var conversation = _conversationDbContext.Conversations
+                .Include(c => c.Messages) // Ensure messages are loaded
+                .FirstOrDefault(c => c.Name.Equals(name));
             if (conversation != null)
             {
+                _conversationDbContext.Messages.RemoveRange(conversation.Messages);
                 _conversationDbContext.Conversations.Remove(conversation);
                 _conversationDbContext.SaveChanges();
             }

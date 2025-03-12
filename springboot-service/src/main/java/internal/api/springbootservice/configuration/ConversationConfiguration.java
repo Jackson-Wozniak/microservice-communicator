@@ -4,6 +4,7 @@ import internal.api.springbootservice.client.DotnetHttpClient;
 import internal.api.springbootservice.entity.Conversation;
 import internal.api.springbootservice.entity.Message;
 import internal.api.springbootservice.properties.GlobalProperties;
+import internal.api.springbootservice.service.ConversationService;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -24,17 +25,7 @@ public class ConversationConfiguration {
 
     @PostConstruct
     public void beginConversation() {
-        /*
-        TODO:
-            - clear conversation if one already exists
-            - send request to clear dotnet conversation
-            - begin new conversation
-         */
         CompletableFuture.delayedExecutor(10, TimeUnit.SECONDS)
-                .execute(() -> {
-                    dotnetHttpClient.startConversation(GlobalProperties.SPRING_BOOT_MESSAGE_NAME);
-                    dotnetHttpClient.sendNextMessage(new Message(new Conversation(GlobalProperties.SPRING_BOOT_MESSAGE_NAME, LocalDateTime.now()),
-                            0, LocalDateTime.now().toString(), LocalDateTime.now().toString()));
-                });
+                .execute(() -> dotnetHttpClient.startConversation(GlobalProperties.SPRING_BOOT_MESSAGE_NAME));
     }
 }

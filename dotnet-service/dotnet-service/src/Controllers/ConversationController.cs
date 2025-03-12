@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace dotnet_service.Controllers;
 
-[Route("api/Conversations")]
 [ApiController]
+[Route("api/Conversations")]
 public class ConversationController : ControllerBase
 {
     private readonly IConversationService _conversationService;
@@ -28,11 +28,11 @@ public class ConversationController : ControllerBase
         return Ok(convo);
     }
     
-    [HttpPost]
-    [Route("/start")]
-    public ActionResult<string> StartConversation([FromQuery] string name)
+    [HttpPost("start")]
+    public ActionResult<string> StartConversation([FromBody] MessageDto request)
     {
-        _conversationService.BeginConversation(name);
+        _conversationService.ClearAndBeginConversation(request.ConversationName);
+        _conversationService.ReceiveMessage(request);
 
         return Created();
     }

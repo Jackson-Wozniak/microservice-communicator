@@ -13,6 +13,12 @@ public class ConversationDbContext : DbContext
 
         modelBuilder.Entity<Message>()
             .HasKey(m => new { m.ConversationName, m.MessageId });
+        
+        modelBuilder.Entity<Conversation>()
+            .HasMany(c => c.Messages)
+            .WithOne(m => m.Conversation)
+            .HasForeignKey(m => m.ConversationName)
+            .OnDelete(DeleteBehavior.Cascade);
     }
     
     public DbSet<Conversation> Conversations { get; set; }

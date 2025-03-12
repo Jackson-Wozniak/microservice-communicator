@@ -34,9 +34,9 @@ public class ConversationController {
     }
 
     @PostMapping(value = "/start")
-    public ResponseEntity<String> startConversation(@RequestBody ConversationRequest request){
-        conversationService.startConversation(request.getName());
-        return new ResponseEntity<>("Conversation: " + request.getName() + " started", HttpStatus.CREATED);
+    public ResponseEntity<String> startConversation(@RequestBody MessageRequest request){
+        conversationService.startConversation(request);
+        return new ResponseEntity<>("Conversation: " + request.getConversation() + " started", HttpStatus.CREATED);
     }
 
     @PostMapping

@@ -7,8 +7,11 @@ import internal.api.springbootservice.exception.ConversationException;
 import internal.api.springbootservice.exception.MessageException;
 import internal.api.springbootservice.payload.MessageRequest;
 import internal.api.springbootservice.repository.ConversationRepository;
+import internal.api.springbootservice.repository.MessageRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 public class ConversationService {
 
     private final ConversationRepository conversationRepository;
+    private final MessageRepository messageRepository;
     private final DotnetHttpClient dotnetHttpClient;
 
     public List<Conversation> findAllConversations(){
@@ -32,13 +36,28 @@ public class ConversationService {
                 .orElseThrow(() -> ConversationException.notFound("cannot find: " + name));
     }
 
-    public void startConversation(String name){
-        if(!Conversation.isValidName(name)){
-            throw ConversationException.createException("Conversation: " + name + " is not valid name");
+    @Transactional
+    @Modifying
+    public void startConversation(MessageRequest req){
+        LocalDateTime receivedAt = LocalDateTime.now();
+        if(!Conversation.isValidName(req.getConversation())){
+            throw ConversationException.createException(
+                    "Conversation: " + req.getConversation() + " is not valid name");
         }
-        Optional<Conversation> conversation = conversationRepository.findById(name);
-        conversation.ifPresent(conversationRepository::delete);
-        conversationRepository.save(new Conversation(name, LocalDateTime.now()));
+        Optional<Conversation> conversation = conversationRepository.findById(req.getConversation());
+        conversation.ifPresent(convo -> {
+            conversationRepository.delete(convo);
+        });
+
+        Conversation createdConvo = conversationRepository.save(new Conversation(req.getConversation(), receivedAt));
+
+        Message message = new Message(createdConvo, req.getMessageId(), req.getTimestamp(), receivedAt.toString());
+        createdConvo.addMessage(message);
+        conversationRepository.save(createdConvo);
+
+        //Now schedule new message to be sent to Http Client
+        CompletableFuture.delayedExecutor(10, TimeUnit.SECONDS)
+                .execute(() -> dotnetHttpClient.sendNextMessage(message));
     }
 
     public void receiveMessage(MessageRequest req){

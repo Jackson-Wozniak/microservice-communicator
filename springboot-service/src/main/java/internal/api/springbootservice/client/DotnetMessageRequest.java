@@ -18,6 +18,12 @@ public class DotnetMessageRequest {
     @JsonProperty("timestamp")
     private String timestamp;
 
+    public DotnetMessageRequest(String conversationName){
+        this.conversation = conversationName;
+        this.messageId = 1;
+        this.timestamp = LocalDateTime.now().toString();
+    }
+
     public DotnetMessageRequest(Message message){
         this.conversation = message.getConversation().getConversationName();
         this.messageId = message.getMessageId().getMessageNumber() + 1;

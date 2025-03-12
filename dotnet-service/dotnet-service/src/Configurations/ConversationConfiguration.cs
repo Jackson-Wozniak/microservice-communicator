@@ -26,13 +26,11 @@ public class ConversationConfiguration : IHostedService
     
     private void InitializeConversation()
     {
-        Thread.Sleep(10000); //pause so that spring boot boots up as well
         using var scope = _serviceProvider.CreateScope();
-        var conversationService = scope.ServiceProvider.GetRequiredService<IConversationService>();
+        
+        Thread.Sleep(10000); //pause so that spring boot boots up as well
         var springBootHttpClient = scope.ServiceProvider.GetRequiredService<SpringBootHttpClient>();
-            
-        conversationService.ClearAndBeginConversation(ConversationName);
-        //now send first message to client
+        
         springBootHttpClient.SendFirstMessage().Wait();
     }
 }

@@ -1,6 +1,7 @@
 package internal.api.springbootservice.client;
 
 import internal.api.springbootservice.entity.Message;
+import internal.api.springbootservice.payload.MessageDto;
 import internal.api.springbootservice.properties.GlobalProperties;
 import lombok.AllArgsConstructor;
 import org.springframework.http.*;
@@ -41,8 +42,16 @@ public class DotnetHttpClient {
          */
     }
 
-    public HttpStatusCode startConversation(String conversation){
-        String url = "http://localhost:17428/start?name=SpringBoot-Conversation";
-        return restTemplate.postForEntity(url, HttpEntity.EMPTY, String.class).getStatusCode();
+    public void startConversation(String conversationName){
+        DotnetMessageRequest message = new DotnetMessageRequest(conversationName);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+        // Wrap the object and headers into an HttpEntity
+        HttpEntity<DotnetMessageRequest> request = new HttpEntity<>(message, headers);
+
+        restTemplate.postForEntity(GlobalProperties.DOTNET_CLIENT_START_CONVERSATION, request, String.class);
     }
 }
