@@ -14,4 +14,18 @@ public class MessageController(IMessageService messageService) : ControllerBase
         return messageService.GetMessages()
             .Select(m => new MessageDTO(m));
     }
+
+    [HttpPost]
+    public IActionResult StartConversation([FromQuery] string conversation)
+    {
+        messageService.StartConversation(conversation);
+        return Ok();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ReceiveMessage([FromBody] MessageDTO message)
+    {
+        await messageService.ReceiveAndQueueNextMessage(message);
+        return Ok();
+    }
 }
