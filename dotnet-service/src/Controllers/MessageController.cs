@@ -25,7 +25,6 @@ public class MessageController(IMessageService messageService) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> ReceiveMessage([FromBody] MessageDTO message)
     {
-        Console.WriteLine("WORKING");
         await messageService.ReceiveAndQueueNextMessage(message);
         return Ok();
     }

@@ -36,7 +36,7 @@ public class MessageService {
             @Override
             public void run() {
                 Message next = new Message(messageDto.getConversation(),
-                        SourceType.fromName(messageDto.getSourceType()),
+                        SourceType.SPRINGBOOT_SERVICE,
                         messageDto.getMessageNumber() + 1,
                         messageDto.getTimestamp().toInstant());
                 messageHttpClient.sendMessage(next);

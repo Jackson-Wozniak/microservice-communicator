@@ -12,7 +12,7 @@ public static class SourceTypeUtils
     {
         return type switch
         {
-            SourceType.DotnetService => "Dotnet-Service",
+            SourceType.DotnetService => "DotnetService",
             SourceType.SpringBootService => "SpringBootService",
             _ => ""
         };

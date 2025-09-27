@@ -6,14 +6,17 @@ namespace dotnet_service.DTOs;
 
 public class MessageDTO
 {
+    [JsonPropertyName("sourceType")]
     public string SourceType { get; set; }
+    [JsonPropertyName("conversation")]
     public string Conversation { get; set; }
+    [JsonPropertyName("messageNumber")]
     public long MessageNumber { get; set; }
+    [JsonPropertyName("timestamp")]
     public DateTime Timestamp { get; set; }
     
     [JsonConstructor]
-    public MessageDTO(string sourceType, string conversation, 
-        long messageNumber, DateTime timestamp)
+    public MessageDTO(string sourceType, string conversation, long messageNumber, DateTime timestamp)
     {
         SourceType = sourceType;
         Conversation = conversation;
