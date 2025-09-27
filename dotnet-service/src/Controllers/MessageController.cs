@@ -15,7 +15,7 @@ public class MessageController(IMessageService messageService) : ControllerBase
             .Select(m => new MessageDTO(m));
     }
 
-    [HttpPost]
+    [HttpPost("start")]
     public IActionResult StartConversation([FromQuery] string conversation)
     {
         messageService.StartConversation(conversation);
