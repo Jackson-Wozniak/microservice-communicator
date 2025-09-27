@@ -34,6 +34,7 @@ public class MessageService : IMessageService
     public async Task<bool> ReceiveAndQueueNextMessage(MessageDTO lastMessage)
     {
         _messageDbContext.Messages.Add(lastMessage.ToMessage());
+        await _messageDbContext.SaveChangesAsync();
 
         await Task.Delay(10000);
         

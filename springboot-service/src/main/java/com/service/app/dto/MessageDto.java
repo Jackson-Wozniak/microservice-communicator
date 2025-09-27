@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 @Getter
 @Setter
@@ -15,16 +17,16 @@ public class MessageDto {
     private String conversation;
     private String sourceType;
     private long messageNumber;
-    private Instant timestamp;
+    private OffsetDateTime timestamp;
 
     public MessageDto(Message message){
         this.conversation = message.getConversation();
         this.sourceType = message.getSourceType().getName();
         this.messageNumber = message.getMessageNumber();
-        this.timestamp = message.getTimestamp();
+        this.timestamp = message.getTimestamp().atOffset(ZoneOffset.UTC);
     }
 
     public Message toMessage(){
-        return new Message(conversation, SourceType.fromName(sourceType), messageNumber, timestamp);
+        return new Message(conversation, SourceType.fromName(sourceType), messageNumber, timestamp.toInstant());
     }
 }

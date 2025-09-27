@@ -11,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/v1/message")
 @AllArgsConstructor
+@CrossOrigin(origins = "*")
 public class MessageController {
     private final MessageService messageService;
 

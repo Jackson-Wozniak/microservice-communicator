@@ -38,7 +38,7 @@ public class MessageService {
                 Message next = new Message(messageDto.getConversation(),
                         SourceType.fromName(messageDto.getSourceType()),
                         messageDto.getMessageNumber() + 1,
-                        messageDto.getTimestamp());
+                        messageDto.getTimestamp().toInstant());
                 messageHttpClient.sendMessage(next);
             }
         }, 10000);
